@@ -2,74 +2,83 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Health Web</title>
   <style>
-    body { font-family: Arial; margin:0; background:#f4f8fb; }
-    header { background:#2b7de9; color:white; padding:15px; text-align:center; }
-    nav { display:flex; justify-content:center; gap:10px; background:#fff; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);} 
-    nav button { padding:10px 15px; border:none; cursor:pointer; background:#e0e7ff; border-radius:5px; }
-    .container { max-width:700px; margin:auto; padding:20px; }
-    .card { background:white; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 5px rgba(0,0,0,0.1);} 
-    input, select, textarea, button { width:100%; padding:10px; margin-top:10px; }
-    button { background:#2b7de9; color:white; }
+    body { margin:0; font-family: 'Segoe UI', Arial; background: linear-gradient(135deg,#dbeafe,#f8fafc); }
+    header { background: linear-gradient(135deg,#2563eb,#3b82f6); color:white; padding:25px; text-align:center; }
+    header h1 { margin:0; font-size:28px; }
+    nav { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    nav button { padding:10px 16px; border:none; border-radius:10px; background:#e0e7ff; cursor:pointer; font-weight:500; }
+    nav button:hover { background:#c7d2fe; }
+    .container { max-width:800px; margin:auto; padding:20px; }
+    .card { background:white; padding:20px; border-radius:16px; margin-bottom:20px; box-shadow:0 6px 15px rgba(0,0,0,0.08);} 
+    input, select, textarea { width:100%; padding:10px; margin-top:10px; border-radius:10px; border:1px solid #ccc; }
+    button.main { background:#2563eb; color:white; margin-top:10px; border:none; border-radius:10px; padding:10px; }
+    button.main:hover { background:#1d4ed8; }
     .hidden { display:none; }
+    .result { font-weight:bold; font-size:16px; margin-top:10px; }
+    .video-box { width:100%; height:200px; background:#111; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; margin-top:10px; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>AI Health Web</h1>
-  <p>Theo dõi sức khỏe thông minh</p>
+  <h1>❤️ AI Health Web</h1>
+  <p>Chăm sóc sức khỏe thông minh bằng AI</p>
 </header>
 
 <nav>
-  <button onclick="showPage('home')">Trang chủ</button>
-  <button onclick="showPage('input')">Nhập dữ liệu</button>
-  <button onclick="showPage('history')">Lịch sử</button>
-  <button onclick="showPage('doctor')">Bác sĩ</button>
+  <button onclick="showPage('home')">🏠 Trang chủ</button>
+  <button onclick="showPage('input')">🧾 Nhập dữ liệu</button>
+  <button onclick="showPage('history')">📊 Lịch sử</button>
+  <button onclick="showPage('ai')">🤖 AI tư vấn</button>
+  <button onclick="showPage('doctor')">👨‍⚕️ Bác sĩ</button>
 </nav>
 
 <div class="container">
 
-  <!-- HOME -->
   <div id="home" class="card">
     <h2>Giới thiệu</h2>
-    <p>Ứng dụng giúp theo dõi sức khỏe hằng ngày, phân tích nguy cơ và hỗ trợ kết nối bác sĩ.</p>
+    <p>AI Health giúp bạn theo dõi sức khỏe mỗi ngày, phát hiện nguy cơ bệnh và hỗ trợ kết nối bác sĩ từ xa.</p>
   </div>
 
-  <!-- INPUT -->
   <div id="input" class="card hidden">
-    <h2>Nhập thông tin</h2>
+    <h2>Nhập thông tin sức khỏe</h2>
     <input type="number" id="sugar" placeholder="Đường huyết (mg/dL)">
     <input type="number" id="pressure" placeholder="Huyết áp">
-
     <select id="symptom">
       <option value="none">Không triệu chứng</option>
       <option value="tired">Mệt</option>
       <option value="dizzy">Chóng mặt</option>
     </select>
-
     <select id="food">
       <option value="normal">Ăn bình thường</option>
       <option value="sweet">Ăn nhiều đồ ngọt</option>
     </select>
-
-    <button onclick="analyze()">Phân tích</button>
-    <p id="result"></p>
+    <button class="main" onclick="analyze()">Phân tích</button>
+    <div class="result" id="result"></div>
   </div>
 
-  <!-- HISTORY -->
   <div id="history" class="card hidden">
     <h2>Lịch sử</h2>
     <ul id="historyList"></ul>
   </div>
 
-  <!-- DOCTOR -->
+  <div id="ai" class="card hidden">
+    <h2>🤖 AI tư vấn sức khỏe</h2>
+    <textarea id="aiInput" placeholder="Nhập câu hỏi..."></textarea>
+    <button class="main" onclick="aiConsult()">Hỏi AI</button>
+    <div class="result" id="aiOutput"></div>
+  </div>
+
   <div id="doctor" class="card hidden">
-    <h2>Hỏi bác sĩ</h2>
-    <textarea id="question" placeholder="Nhập câu hỏi..."></textarea>
-    <button onclick="askDoctor()">Gửi</button>
-    <p id="doctorReply"></p>
+    <h2>👨‍⚕️ Kết nối bác sĩ</h2>
+    <p>Bạn có thể gọi video với bác sĩ (demo)</p>
+    <div class="video-box">📹 Video Call (Demo)</div>
+    <button class="main" onclick="startCall()">Bắt đầu gọi</button>
+    <button class="main" onclick="endCall()">Kết thúc</button>
+    <div class="result" id="callStatus"></div>
   </div>
 
 </div>
@@ -85,18 +94,16 @@ function analyze() {
   let food = document.getElementById('food').value;
   let symptom = document.getElementById('symptom').value;
 
-  let result = "Ổn định";
-
+  let result = "✅ Ổn định";
   if (sugar > 140) result = "⚠️ Đường huyết cao";
   if (food === 'sweet') result = "⚠️ Ăn nhiều đồ ngọt";
-  if (sugar > 140 && symptom !== 'none') result = "🚨 Nguy cơ cao, nên đi khám";
+  if (sugar > 140 && symptom !== 'none') result = "🚨 Nguy cơ cao!";
 
   document.getElementById('result').innerText = result;
 
   let data = JSON.parse(localStorage.getItem('history')) || [];
-  data.push(`Đường: ${sugar} - ${result}`);
+  data.push(`Đường: ${sugar} | ${result}`);
   localStorage.setItem('history', JSON.stringify(data));
-
   loadHistory();
 }
 
@@ -111,9 +118,20 @@ function loadHistory() {
   });
 }
 
-function askDoctor() {
-  let reply = "Bác sĩ khuyên bạn theo dõi thêm và giảm đồ ngọt.";
-  document.getElementById('doctorReply').innerText = reply;
+function aiConsult() {
+  let input = document.getElementById('aiInput').value.toLowerCase();
+  let output = "Bạn nên theo dõi thêm.";
+  if (input.includes("mệt")) output = "Bạn nên nghỉ ngơi.";
+  if (input.includes("đường")) output = "Hạn chế đồ ngọt.";
+  document.getElementById('aiOutput').innerText = output;
+}
+
+function startCall() {
+  document.getElementById('callStatus').innerText = "📞 Đang kết nối bác sĩ...";
+}
+
+function endCall() {
+  document.getElementById('callStatus').innerText = "❌ Đã kết thúc cuộc gọi";
 }
 
 loadHistory();
