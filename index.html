@@ -1,141 +1,84 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Health Web</title>
-  <style>
-    body { margin:0; font-family: 'Segoe UI', Arial; background: linear-gradient(135deg,#dbeafe,#f8fafc); }
-    header { background: linear-gradient(135deg,#2563eb,#3b82f6); color:white; padding:25px; text-align:center; }
-    header h1 { margin:0; font-size:28px; }
-    nav { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-    nav button { padding:10px 16px; border:none; border-radius:10px; background:#e0e7ff; cursor:pointer; font-weight:500; }
-    nav button:hover { background:#c7d2fe; }
-    .container { max-width:800px; margin:auto; padding:20px; }
-    .card { background:white; padding:20px; border-radius:16px; margin-bottom:20px; box-shadow:0 6px 15px rgba(0,0,0,0.08);} 
-    input, select, textarea { width:100%; padding:10px; margin-top:10px; border-radius:10px; border:1px solid #ccc; }
-    button.main { background:#2563eb; color:white; margin-top:10px; border:none; border-radius:10px; padding:10px; }
-    button.main:hover { background:#1d4ed8; }
-    .hidden { display:none; }
-    .result { font-weight:bold; font-size:16px; margin-top:10px; }
-    .video-box { width:100%; height:200px; background:#111; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; margin-top:10px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Health App</title>
+
+<style>
+body { margin:0; font-family: Arial; background:#f5f5f5; }
+.header { background: url("https://images.unsplash.com/photo-1588776814546-ec7e3b1b4a04") center/cover; color:white; text-align:center; padding:80px 20px; }
+.header h1 { font-size:50px; margin:0; }
+.header .line { width:200px; height:5px; background:red; margin:15px auto; }
+.container { max-width:1000px; margin:auto; padding:40px 20px; text-align:center; }
+.section-title { font-size:30px; margin-bottom:20px; }
+.grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:20px; }
+.card { background:white; padding:15px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+.card img { width:100%; border-radius:10px; }
+.card h3 { color:#e53935; }
+.button { margin-top:30px; padding:12px 20px; background:#e53935; color:white; border:none; border-radius:5px; cursor:pointer; }
+.footer { background:#e53935; color:white; text-align:center; padding:20px; margin-top:40px; }
+</style>
 </head>
+
 <body>
 
-<header>
-  <h1>❤️ AI Health Web</h1>
-  <p>Chăm sóc sức khỏe thông minh bằng AI</p>
-</header>
-
-<nav>
-  <button onclick="showPage('home')">🏠 Trang chủ</button>
-  <button onclick="showPage('input')">🧾 Nhập dữ liệu</button>
-  <button onclick="showPage('history')">📊 Lịch sử</button>
-  <button onclick="showPage('ai')">🤖 AI tư vấn</button>
-  <button onclick="showPage('doctor')">👨‍⚕️ Bác sĩ</button>
-</nav>
-
-<div class="container">
-
-  <div id="home" class="card">
-    <h2>Giới thiệu</h2>
-    <p>AI Health giúp bạn theo dõi sức khỏe mỗi ngày, phát hiện nguy cơ bệnh và hỗ trợ kết nối bác sĩ từ xa.</p>
-  </div>
-
-  <div id="input" class="card hidden">
-    <h2>Nhập thông tin sức khỏe</h2>
-    <input type="number" id="sugar" placeholder="Đường huyết (mg/dL)">
-    <input type="number" id="pressure" placeholder="Huyết áp">
-    <select id="symptom">
-      <option value="none">Không triệu chứng</option>
-      <option value="tired">Mệt</option>
-      <option value="dizzy">Chóng mặt</option>
-    </select>
-    <select id="food">
-      <option value="normal">Ăn bình thường</option>
-      <option value="sweet">Ăn nhiều đồ ngọt</option>
-    </select>
-    <button class="main" onclick="analyze()">Phân tích</button>
-    <div class="result" id="result"></div>
-  </div>
-
-  <div id="history" class="card hidden">
-    <h2>Lịch sử</h2>
-    <ul id="historyList"></ul>
-  </div>
-
-  <div id="ai" class="card hidden">
-    <h2>🤖 AI tư vấn sức khỏe</h2>
-    <textarea id="aiInput" placeholder="Nhập câu hỏi..."></textarea>
-    <button class="main" onclick="aiConsult()">Hỏi AI</button>
-    <div class="result" id="aiOutput"></div>
-  </div>
-
-  <div id="doctor" class="card hidden">
-    <h2>👨‍⚕️ Kết nối bác sĩ</h2>
-    <p>Bạn có thể gọi video với bác sĩ (demo)</p>
-    <div class="video-box">📹 Video Call (Demo)</div>
-    <button class="main" onclick="startCall()">Bắt đầu gọi</button>
-    <button class="main" onclick="endCall()">Kết thúc</button>
-    <div class="result" id="callStatus"></div>
-  </div>
-
+<div class="header">
+  <h1>AI HEALTH APP</h1>
+  <div class="line"></div>
 </div>
 
-<script>
-function showPage(page) {
-  document.querySelectorAll('.card').forEach(div => div.classList.add('hidden'));
-  document.getElementById(page).classList.remove('hidden');
-}
+<div class="container">
+  <h2 class="section-title">CHÀO MỪNG</h2>
+  <p>AI Health App giúp theo dõi sức khỏe, tư vấn thông minh và kết nối bác sĩ mọi lúc mọi nơi.</p>
+</div>
 
-function analyze() {
-  let sugar = document.getElementById('sugar').value;
-  let food = document.getElementById('food').value;
-  let symptom = document.getElementById('symptom').value;
+<div class="container">
+  <h2 class="section-title">GIÁ TRỊ CỐT LÕI</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1581093458791-9d42b89d4b0d">
+      <h3>Chính xác & Dữ liệu</h3>
+      <p>Dựa trên AI và dữ liệu y khoa đáng tin cậy.</p>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1588776814546-ec7e3b1b4a04">
+      <h3>Lấy người dùng làm trung tâm</h3>
+      <p>Dễ sử dụng và hỗ trợ nhanh chóng.</p>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b">
+      <h3>Bảo mật</h3>
+      <p>Bảo vệ dữ liệu cá nhân tuyệt đối.</p>
+    </div>
+  </div>
+</div>
 
-  let result = "✅ Ổn định";
-  if (sugar > 140) result = "⚠️ Đường huyết cao";
-  if (food === 'sweet') result = "⚠️ Ăn nhiều đồ ngọt";
-  if (sugar > 140 && symptom !== 'none') result = "🚨 Nguy cơ cao!";
+<div class="container">
+  <div class="grid">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2">
+      <h3>Tiếp cận dễ dàng</h3>
+      <p>Kết nối mọi nơi mọi lúc.</p>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b">
+      <h3>Health Warning</h3>
+      <p>Cảnh báo sức khỏe sớm.</p>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1581091215367-59ab6b5b9e8b">
+      <h3>Đổi mới liên tục</h3>
+      <p>Luôn cải tiến công nghệ.</p>
+    </div>
+  </div>
+  <button class="button">Bắt đầu theo dõi</button>
+</div>
 
-  document.getElementById('result').innerText = result;
-
-  let data = JSON.parse(localStorage.getItem('history')) || [];
-  data.push(`Đường: ${sugar} | ${result}`);
-  localStorage.setItem('history', JSON.stringify(data));
-  loadHistory();
-}
-
-function loadHistory() {
-  let list = document.getElementById('historyList');
-  list.innerHTML = "";
-  let data = JSON.parse(localStorage.getItem('history')) || [];
-  data.forEach(item => {
-    let li = document.createElement('li');
-    li.innerText = item;
-    list.appendChild(li);
-  });
-}
-
-function aiConsult() {
-  let input = document.getElementById('aiInput').value.toLowerCase();
-  let output = "Bạn nên theo dõi thêm.";
-  if (input.includes("mệt")) output = "Bạn nên nghỉ ngơi.";
-  if (input.includes("đường")) output = "Hạn chế đồ ngọt.";
-  document.getElementById('aiOutput').innerText = output;
-}
-
-function startCall() {
-  document.getElementById('callStatus').innerText = "📞 Đang kết nối bác sĩ...";
-}
-
-function endCall() {
-  document.getElementById('callStatus').innerText = "❌ Đã kết thúc cuộc gọi";
-}
-
-loadHistory();
-</script>
+<div class="footer">
+  <h2>HÃY CHÚ Ý ĐẾN SỨC KHỎE BẢN THÂN</h2>
+  <p>Liên hệ: quyendinh070811@gmail.com</p>
+</div>
 
 </body>
 </html>
